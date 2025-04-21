@@ -55,7 +55,7 @@ class order(base_model):
     status = models.CharField(max_length=50, choices=[('pending', 'ödeme bekliyor'), ('completed', 'ödendi'), ('canceled', 'iptal edildi')])# sipariş durumu
 
 class Product(base_model):#ürün(körili makarna) çeşidi
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)#"ürün adı"
     description = models.TextField(blank=True, null=True)#"ürün açıklaması"
     price = models.DecimalField(max_digits=10, decimal_places=2)# fiyatı
     image_url = models.URLField(max_length=255, blank=True, null=True)# resim url'si
