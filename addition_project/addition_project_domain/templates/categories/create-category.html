@@ -1,0 +1,26 @@
+{%block title %}
+    Create Category -
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <div class="col-12">
+                        <form actions="{% url 'create_category' %}" method="POST" novalidate>
+                            {% csrf_token %}
+                            {% for field in form %}
+                                <div class="mb3 {% if field.errors %} invalid {% endif %}">
+                                    {% if field.errors %} <div class = "alert alert-danger"> {{field.errors}} </div> {% endif %}
+                                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field}}
+                            {% endfor%}
+
+                            <button class="btn btn-primary" type="submit" class="btn btn-primary">Oluştur</button>
+                        </form>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>            
+{% endblock %}
