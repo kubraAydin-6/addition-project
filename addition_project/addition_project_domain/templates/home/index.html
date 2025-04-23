@@ -77,40 +77,27 @@
       </div>
     </div>
     <div class="row">
+      {%for product in products%}
       <div class="col-md-4">
         <div class="card card-chart">
-          <div class="card-header card-header-success">
-            <div class="ct-chart" id="dailySalesChart"></div>
+          <div class="card-header" style="height: 40vh; overflow: hidden; background-color:rgb(230, 227, 227);">
+            <img src="{{product.image_url}}" class="img-fluid" style="height: 100%; width: 100%; object-fit: cover;">
           </div>
           <div class="card-body">
-            <h4 class="card-title">Daily Sales</h4>
-            <p class="card-category">
-              <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
+            <h4 class="card-title">{{product.name}}</h4>
+            <p class="card-category" style="min-height: 4vh;">
+              {{product.description}}
+            </p>
           </div>
           <div class="card-footer">
-            <div class="stats">
-              <i class="material-icons">access_time</i> updated 4 minutes ago
-            </div>
+              <p style="font-weight: bold;"> {{product.price}}</p>
+            <button type="button" class="btn btn-primary btn-link btn-sm" style="margin-top: 5px; margin-left: 5px; float: right; color: green;">
+              Sipariş Ver
+            </button>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card card-chart">
-          <div class="card-header card-header-warning">
-            <div class="ct-chart" id="websiteViewsChart"></div>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title">Email Subscriptions</h4>
-            <p class="card-category">Last Campaign Performance</p>
-          </div>
-          <div class="card-footer">
-            <div class="stats">
-              <i class="material-icons">access_time</i> campaign sent 2 days ago
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
+      {% endfor %}
         <div class="card card-chart">
           <div class="card-header card-header-danger">
             <div class="ct-chart" id="completedTasksChart"></div>
@@ -125,7 +112,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
     <div class="row">
       <div class="col-lg-6 col-md-12">

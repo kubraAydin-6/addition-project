@@ -1,10 +1,14 @@
 from django.shortcuts import redirect, render
 from .forms import category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form
-from .models import Category
+from .models import Category,Product
 
-def index(request):
-    categories = Category.objects.all()
-    return render(request, 'home/index.html', {'categories': categories})
+def index(request, category_id=None):
+    categories = Category.objects.all().order_by('sequence').values()
+    if category_id is None:
+        products = Product.objects.all().order_by('sequence').values()
+        return render(request, 'home/index.html', {'categories': categories,'products': products})
+    products = Product.objects.filter(category_id=category_id).order_by('sequence').values()
+    return render(request, 'home/index.html', {'categories': categories,'products': products})
 
 def create_category(request):
     if request.method == "POST":

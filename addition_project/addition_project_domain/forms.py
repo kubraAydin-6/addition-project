@@ -82,8 +82,6 @@ class product_create_form(forms.ModelForm):
 
         }
 
-        # TODO: Add Customer form
-
 class customer_create_form(forms.ModelForm):
     class Meta:
         model = customer
@@ -105,7 +103,6 @@ class customer_create_form(forms.ModelForm):
                 'required': 'Bu alan zorunludur.',
             },
         }
-# TODO: Add Order form
 
 class order_create_form(forms.ModelForm):
     class Meta:
@@ -133,7 +130,6 @@ class order_create_form(forms.ModelForm):
                 'required': 'Bu alan zorunludur.',
             },
         }
-# TODO: Add Order Product form
 
 class order_product_create_form(forms.ModelForm):
     class Meta:
@@ -177,3 +173,4 @@ class order_product_create_form(forms.ModelForm):
                 'required': 'Bu alan zorunludur.',
             },
         }
+

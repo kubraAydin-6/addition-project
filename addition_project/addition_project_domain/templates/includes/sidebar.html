@@ -82,10 +82,9 @@
         {%for category in categories%}
         <li class="nav-item active">
             <a class="nav-link" 
-               target="_blank" rel="noopener noreferrer"  
-               href="https://appseed.us/admin-dashboards/django-dashboard-material-pro">
-              <i class="material-icons">unarchive</i>
-              <p>{{category.name}}</p>
+               rel="noopener noreferrer"  
+               href="/home/{{category.id}}">
+              <img src="{{category.image_url}}"  class="img-fluid" style="height: 30%; width: 30%; object-fit: cover; margin-right: 10px;">{{category.name}}</img>
             </a>
           </li>    
           {% endfor %}      
