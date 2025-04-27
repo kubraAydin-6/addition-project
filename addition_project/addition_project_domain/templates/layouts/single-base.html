@@ -41,35 +41,9 @@
  
  <body class="">
    <div class="wrapper ">
- 
-     {% include 'includes/sidebar.html' %}
- 
-     <div class="main-panel">
- 
-       {% include 'includes/navigation.html' %}
- 
-       <!-- End Navbar -->
        <div class="content">
-         <div class="container-fluid">
- 
            {% block content %}{% endblock content %}
- 
-         </div>
        </div>
- 
-       {% include 'includes/footer.html' %}
- 
-     </div>
    </div>
- 
-   {% include 'includes/fixed-plugin.html' %}
- 
-   {% include 'includes/scripts.html' %}
- 
-   {% include 'includes/scripts-sidebar.html' %}
-   
-   <!-- Specific Page JS goes HERE  -->
-   {% block javascripts %}{% endblock javascripts %}
-   
  </body>
  </html>

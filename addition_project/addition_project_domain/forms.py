@@ -12,11 +12,11 @@ class category_create_form(forms.ModelForm):
             'is_active': 'Aktif mi?',
         }
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'image_url': forms.URLInput(attrs={'class': 'form-control'}),
-            'sequence': forms.NumberInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Kategori Adı Giriniz.'}),
+            'image_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Resim Ekleyiniz.'}),
+            'sequence': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Kategori Sırası Seçiniz.'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        },
+        }
         error_messages = {
             'name': {
                 'required': 'Bu alan zorunludur.',
@@ -48,12 +48,12 @@ class product_create_form(forms.ModelForm):
             'sequence': 'Sıralama',
         }
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control'}),
-            'image_url': forms.URLInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-select'}),
-            'sequence': forms.NumberInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ürün Adı Giriniz.'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ürün Açıklaması Giriniz.'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ürün Fiyatı Giriniz.'}),
+            'image_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Ürün Resmi Ekleyiniz.'}),
+            'category': forms.Select(attrs={'class': 'form-select', 'placeholder': 'Kategori Seçiniz.'}),
+            'sequence': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ürün Sıralaması Giriniz.'}),
         }
         error_messages = {
             'name': {
@@ -172,5 +172,18 @@ class order_product_create_form(forms.ModelForm):
             'status': {
                 'required': 'Bu alan zorunludur.',
             },
+        }
+
+class LoginForm(forms.Form):
+    userName = forms.CharField(label="Kullanıcı Adı", required=True)
+    password = forms.CharField(label="Şifre", required=True, widget=forms.PasswordInput)
+
+    error_messages = {
+            'userName': {
+                'required': 'Bu alan zorunludur.',
+            },
+            'password': {
+                'required': 'Bu alan zorunludur.',
+            }
         }
 
