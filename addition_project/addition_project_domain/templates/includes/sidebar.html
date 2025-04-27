@@ -2,7 +2,7 @@
     <div class="logo">
       <a target="_blank" rel="noopener noreferrer" 
           class="simple-text logo-normal">
-        Kategoriler
+        KübElBu
       </a>
     </div>
     <div class="sidebar-wrapper">
@@ -22,21 +22,27 @@
           </a>
         </li>
         <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-          <a class="nav-link" href="/home/ui-tables">
+          <a class="nav-link" href="/home/admin/categories">
             <i class="material-icons">content_paste</i>
-            <p>Table List</p>
+            <p>Kategoriler</p>
           </a>
         </li>
         <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
-          <a class="nav-link" href="/home/ui-typographies">
+          <a class="nav-link" href="/home/admin/products">
             <i class="material-icons">library_books</i>
-            <p>Typography</p>
+            <p>Ürünler</p>
           </a>
         </li>
         <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
-          <a class="nav-link" href="/ui-icons.html">
+          <a class="nav-link" href="/home/admin/invoices">
             <i class="material-icons">bubble_chart</i>
-            <p>Icons</p>
+            <p>Faturalar</p>
+          </a>
+        </li>
+        <li class="nav-item {% if 'ui-notifications' in segment %} active {% endif %}">
+          <a class="nav-link" href="/home/admin/customers">
+            <i class="material-icons">Customers</i>
+            <p>Müşteriler</p>
           </a>
         </li>
         <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
@@ -71,7 +77,6 @@
             </a>
           </li>    
           {% endfor %}      
-
       {% endif %}
       </ul>
     </div>

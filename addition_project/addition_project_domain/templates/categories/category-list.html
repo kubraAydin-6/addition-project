@@ -1,0 +1,54 @@
+{% extends "layouts/base.html" %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-8"></div>
+        <a href="{% url 'create_category'%}">
+            <button type="button" class="btn btn-primary btn-link btn-sm col-md-3" style="margin-top: 5px; float: right; color: green;">
+                Yeni Kategori Ekle
+            </button>
+        </a>
+    </div>
+    <div class="row">
+      {%for category in categories%}
+      <div class="col-md-4">
+        <div class="card card-chart">
+          <div class="card-header" style="height: 40vh; overflow: hidden; background-color:rgb(230, 227, 227);">
+            <img src="{{category.image_url}}" class="img-fluid" style="height: 100%; width: 100%; object-fit: cover;">
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">{{category.name}}</h4>
+            <p class="card-category" style="min-height: 4vh;">
+              {{category.name}}
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'update_category' category.id%}">
+                <button type="button" class="btn btn-primary btn-link btn-sm" style="margin-top: 5px; margin-left: 5px; float: right; color: green;">
+                Güncelle
+                </button>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

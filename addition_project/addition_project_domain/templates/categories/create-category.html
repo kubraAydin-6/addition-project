@@ -8,7 +8,7 @@
                 <h5 class="mb-0">Kategori Oluştur</h5>
             </div>
             <div class="card-body">
-                <form action="{% url 'create_category' %}" method="POST" novalidate>
+                <form action="{% if form.instance.id%}{% url 'update_category' form.instance.id%}{% else %}{% url 'create_category' %}{% endif%}" method="POST" novalidate>
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="mb-3 {% if field.errors %}has-error{% endif %}">
@@ -21,12 +21,19 @@
                             {% endif %}
                         </div>
                     {% endfor %}
-                    
+                    {% if form.instance.id%}
+                    <div class="d-grid" style="margin-top: 2rem;">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-plus-circle"></i> Güncelle
+                        </button>
+                    </div>
+                    {% else %}
                     <div class="d-grid" style="margin-top: 2rem;">
                         <button class="btn btn-primary" type="submit">
                             <i class="bi bi-plus-circle"></i> Oluştur
                         </button>
                     </div>
+                    {% endif %}
                 </form>
             </div>
         </div>

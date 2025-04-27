@@ -1,8 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form
-from .models import Category,Product
+from .models import Category,Product,order,customer
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def index(request, category_id=None):
     categories = Category.objects.all().order_by('sequence').values()
@@ -12,32 +13,35 @@ def index(request, category_id=None):
     products = Product.objects.filter(category_id=category_id).order_by('sequence').values()
     return render(request, 'home/index.html', {'categories': categories,'products': products})
 
+@login_required
 def create_category(request):
     if request.method == "POST":
         form = category_create_form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/home')
+            return category_list(request)
     else:
         form = category_create_form()
     return render(request, 'categories/create-category.html', {'form': form})
 
+@login_required
 def create_product(request):
     if request.method == "POST":
         form = product_create_form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/home')
+            return product_list(request)
     else:
         form = product_create_form()
     return render(request, 'products/create-product.html', {'form': form})
 
+@login_required
 def create_customer(request):
     if request.method == "POST":
         form = customer_create_form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/home')
+            return customer_list(request)
     else:
         form = customer_create_form()
     return render(request, 'customers/create-customer.html', {'form': form})
@@ -92,3 +96,59 @@ def ui_typography(request):
 
 def ui_notification(request):
     return render(request, 'home/ui-notifications.html')
+
+@login_required
+def category_list(request):
+    categories = Category.objects.all().order_by('sequence').values()
+    return render(request, 'categories/category-list.html', {'categories': categories})
+
+@login_required
+def product_list(request):
+    products = Product.objects.all().order_by('sequence').values()
+    return render(request, 'products/product-list.html', {'products': products})
+
+@login_required
+def invoice_list(request):
+    orders = order.objects.all().order_by('created_at').values()
+    return render(request, 'orders/invoice-list.html', {'invoices': orders})
+
+@login_required
+def customer_list(request):
+    customers = customer.objects.all().order_by('name').values()
+    return render(request, 'customers/customer-list.html', {'customers': customers})
+
+@login_required
+def update_category(request, category_id):
+    category= get_object_or_404(Category, pk=category_id)
+    if request.method == "POST":
+        form = category_create_form(request.POST,instance=category)
+        if form.is_valid():
+            form.save()
+            return category_list(request)
+    else:
+        form = category_create_form(instance=category)
+    return render(request, 'categories/create-category.html', {'form': form})
+
+@login_required
+def update_product(request, product_id):
+    product= get_object_or_404(Product, pk=product_id)
+    if request.method == "POST":
+        form = product_create_form(request.POST,instance=product)
+        if form.is_valid():
+            form.save()
+            return product_list(request)
+    else:
+        form = product_create_form(instance=product)
+    return render(request, 'products/create-product.html', {'form': form})
+
+@login_required
+def update_customer(request, customer_id):
+    get_customer= get_object_or_404(customer, pk=customer_id)
+    if request.method == "POST":
+        form = customer_create_form(request.POST,instance=get_customer)
+        if form.is_valid():
+            form.save()
+            return customer_list(request)
+    else:
+        form = customer_create_form(instance=get_customer)
+    return render(request, 'customers/create-customer.html', {'form': form})
