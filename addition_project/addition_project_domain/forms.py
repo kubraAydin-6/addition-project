@@ -174,3 +174,16 @@ class order_product_create_form(forms.ModelForm):
             },
         }
 
+class LoginForm(forms.Form):
+    userName = forms.CharField(label="Kullanıcı Adı", required=True)
+    password = forms.CharField(label="Şifre", required=True, widget=forms.PasswordInput)
+
+    error_messages = {
+            'userName': {
+                'required': 'Bu alan zorunludur.',
+            },
+            'password': {
+                'required': 'Bu alan zorunludur.',
+            }
+        }
+
