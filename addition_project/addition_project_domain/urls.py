@@ -23,4 +23,7 @@ urlpatterns = [
     path("sümbok/update/<int:category_id>", views.update_category, name="update_category"),
     path("sümbok/update/ürün/<int:product_id>", views.update_product, name="update_product"),
     path("sümbok/update/müşteri/<int:customer_id>", views.update_customer, name="update_customer"),
+    path("sümbok/delete/category/<int:category_id>", views.delete_category, name="delete_category"),
+    path("sümbok/delete/customer/<int:customer_id>", views.delete_customer, name="delete_customer"),
+    path("sümbok/delete/product/<int:product_id>", views.delete_product, name="delete_product"),
 ]

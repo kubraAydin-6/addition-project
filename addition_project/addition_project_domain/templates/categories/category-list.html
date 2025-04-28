@@ -28,10 +28,15 @@
           </div>
           <div class="card-footer">
             <a href="{% url 'update_category' category.id%}">
-                <button type="button" class="btn btn-primary btn-link btn-sm" style="margin-top: 5px; margin-left: 5px; float: right; color: green;">
+                <button type="button" class="btn btn-primary btn-link btn-sm" style="margin-top: 5px; margin-left: 5px; float: left; color: green;">
                 Güncelle
                 </button>
             </a>
+            <a href="{% url 'delete_category' category.id%}">
+              <button type="button" class="btn btn-danger btn-link btn-sm" style="margin-top: 5px; margin-left: 5px; float: right; color: red;">
+              Sil
+              </button>
+          </a>
           </div>
         </div>
       </div>

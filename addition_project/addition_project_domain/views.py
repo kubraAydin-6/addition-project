@@ -152,3 +152,21 @@ def update_customer(request, customer_id):
     else:
         form = customer_create_form(instance=get_customer)
     return render(request, 'customers/create-customer.html', {'form': form})
+
+@login_required
+def delete_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    category.delete()
+    return category_list(request)
+
+@login_required
+def delete_customer(request, customer_id):
+    deleted_customer = get_object_or_404(customer, pk=customer_id)
+    deleted_customer.delete()
+    return customer_list(request)
+
+@login_required
+def delete_product(request, product_id):
+    deleted_product = get_object_or_404(Product, pk=product_id)
+    deleted_product.delete()
+    return product_list(request)
