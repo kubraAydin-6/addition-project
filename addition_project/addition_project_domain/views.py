@@ -1,17 +1,14 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form
 from .models import Category,Product,order,customer
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 def index(request, category_id=None):
     categories = Category.objects.all().order_by('sequence').values()
-    if category_id is None:
-        products = Product.objects.all().order_by('sequence').values()
-        return render(request, 'home/index.html', {'categories': categories,'products': products})
-    products = Product.objects.filter(category_id=category_id).order_by('sequence').values()
-    return render(request, 'home/index.html', {'categories': categories,'products': products})
+    customers = customer.objects.all().order_by('name').values()
+    return render(request, 'customers/customer-list.html', {'categories': categories,'customers': customers})
 
 @login_required
 def create_category(request):
@@ -81,7 +78,8 @@ def login_user(request):
                 messages.error(request, 'Kullanıcı adı veya şifre hatalı')
     return render(request, 'home/login.html', {'form': form})
 
-def logout(request):
+def logout_user(request):
+    logout(request)
     form = LoginForm()
     return render(request, 'home/login.html', {'form': form})
 
@@ -112,7 +110,6 @@ def invoice_list(request):
     orders = order.objects.all().order_by('created_at').values()
     return render(request, 'orders/invoice-list.html', {'invoices': orders})
 
-@login_required
 def customer_list(request):
     customers = customer.objects.all().order_by('name').values()
     return render(request, 'customers/customer-list.html', {'customers': customers})
@@ -170,3 +167,22 @@ def delete_product(request, product_id):
     deleted_product = get_object_or_404(Product, pk=product_id)
     deleted_product.delete()
     return product_list(request)
+
+def select_customer(request, customer_id):
+    selected_customer = get_object_or_404(customer, pk=customer_id)
+    selected_customer.is_customer = True
+    form = customer_create_form(request.POST,instance=selected_customer)
+    if form.is_valid():
+        form.save()
+    get_category = Category.objects.all().order_by('sequence').values()
+    products = Product.objects.all().order_by('sequence').values()
+    return render(request, 'home/product-index.html', {'categories': get_category,'products': products})
+
+def index_by_category(request, customer_id, category_id):
+    categories = Category.objects.all().order_by('sequence').values()
+    if category_id is not None:
+        products = Product.objects.filter(category_id= category_id).order_by('sequence').values()
+        return render(request, 'home/product-index.html', {'products': products,'categories': categories})
+    products = Product.objects.all().order_by('sequence').values()
+    return render(request, 'home/product-index.html', {'products': products,'categories': categories})
+    

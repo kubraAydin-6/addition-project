@@ -59,7 +59,7 @@
         </li>
 
         <li class="nav-item ">
-          <a class="nav-link" href="{% url 'logout' %}" >
+          <a class="nav-link" href="{% url 'logout_user' %}" >
             <i class="material-icons">directions_run</i>
             <p>Logout</p>
           </a>
@@ -72,7 +72,7 @@
         <li class="nav-item active">
             <a class="nav-link" 
                rel="noopener noreferrer"  
-               href="/home/{{category.id}}">
+               href="/home/5/{{category.id}}">
               <img src="{{category.image_url}}"  class="img-fluid" style="height: 30%; width: 30%; object-fit: cover; margin-right: 10px;">{{category.name}}</img>
             </a>
           </li>    
