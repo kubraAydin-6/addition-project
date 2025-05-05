@@ -32,4 +32,7 @@ urlpatterns = [
     path("sümbok/sipariş", views.create_order, name="create_order"),
     path("sümbok/sipariş/ürün", views.create_order_product, name="create_order_product"),
     path("admin/invoices", views.invoice_list, name="invoice_list"),
+    #kitchen
+    path('kitchen/', views.kitchen_order_list, name='kitchen_order_list'),
+    path('kitchen/mark-prepared/<int:pk>/', views.mark_order_prepared, name='mark_order_prepared'),
 ]

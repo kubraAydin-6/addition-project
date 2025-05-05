@@ -1,0 +1,15 @@
+{% extends "layouts/single-base.html" %}
+<h2>Mutfak Sipariş Listesi</h2>
+<ul>
+  {% for order in orders %}
+    <li>
+      Sipariş: {{ order.order }}
+      <form method="post" action="{% url 'mark_order_prepared' order.pk %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Hazırlandı</button>
+      </form>
+    </li>
+  {% empty %}
+    <li>Hazırlanacak sipariş yok.</li>
+  {% endfor %}
+</ul>

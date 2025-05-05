@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Product, customer,order, order_product
+from .models import Category, Product, customer,order, order_product, KitchenOrder
 
 class category_create_form(forms.ModelForm):
     class Meta:
@@ -187,3 +187,10 @@ class LoginForm(forms.Form):
             }
         }
 
+class KitchenOrderForm(forms.ModelForm):
+    class Meta:
+        model = KitchenOrder
+        fields = ['is_prepared']
+        widgets = {
+            'is_prepared': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }

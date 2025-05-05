@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form
-from .models import Category,Product,order,customer
+from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form,KitchenOrderForm
+from .models import Category,Product,order,customer, KitchenOrder
 from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -186,3 +186,15 @@ def index_by_category(request, customer_id, category_id):
     products = Product.objects.all().order_by('sequence').values()
     return render(request, 'home/product-index.html', {'products': products,'categories': categories})
     
+def kitchen_order_list(request):
+    orders = KitchenOrder.objects.filter(is_prepared=False)
+    return render(request, 'kitchen/kitchen-orders.html', {'orders': orders})
+
+
+def mark_order_prepared(request, pk):
+    kitchen_order = KitchenOrder.objects.get(pk=pk)
+    kitchen_order.is_prepared = True
+    kitchen_order.prepared_at = timezone.now()
+    kitchen_order.save()
+    return redirect('kitchen_order_list')
+

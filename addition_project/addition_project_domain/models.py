@@ -69,3 +69,10 @@ class Product(base_model):#ürün(körili makarna) çeşidi
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
     
+class KitchenOrder(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)
+    is_prepared = models.BooleanField(default=False)
+    prepared_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.order} - {'Hazır' if self.is_prepared else 'Hazırlanıyor'}"
