@@ -35,4 +35,8 @@ urlpatterns = [
     #kitchen
     path('kitchen/', views.kitchen_order_list, name='kitchen_order_list'),
     path('kitchen/mark-prepared/<int:pk>/', views.mark_order_prepared, name='mark_order_prepared'),
+    path('cart/add/<int:product_id>/<int:customer_id>', views.cart_add, name='cart_add'),
+    path('cart/<int:customer_id>', views.cart_detail, name='cart_detail'),
+    path('cart/checkout/<int:customer_id>', views.cart_checkout, name='cart_checkout'),
+    path("cart/clear/", views.cart_clear, name="cart_clear"),
 ]
