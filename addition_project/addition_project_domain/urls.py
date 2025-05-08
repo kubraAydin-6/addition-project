@@ -32,4 +32,8 @@ urlpatterns = [
     path("sümbok/sipariş", views.create_order, name="create_order"),
     path("sümbok/sipariş/ürün", views.create_order_product, name="create_order_product"),
     path("admin/invoices", views.invoice_list, name="invoice_list"),
+    path('cart/add/<int:product_id>/<int:customer_id>', views.cart_add, name='cart_add'),
+    path('cart/<int:customer_id>', views.cart_detail, name='cart_detail'),
+    path('cart/checkout/<int:customer_id>', views.cart_checkout, name='cart_checkout'),
+    path("cart/clear/", views.cart_clear, name="cart_clear"),
 ]

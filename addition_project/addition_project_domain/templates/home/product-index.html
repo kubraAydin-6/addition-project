@@ -14,15 +14,17 @@
             <div class="card-icon">
               <i class="material-icons">content_copy</i>
             </div>
-            <p class="card-category">Used Space</p>
-            <h3 class="card-title">49/50
-              <small>GB</small>
+            <p class ="card-category">{{selected_customer.name}}</p>
+            <p class="card-category">SEPET</p>
+            <h3 class="card-title">.....
+              <small>TL</small>
             </h3>
           </div>
           <div class="card-footer">
             <div class="stats">
-              <i class="material-icons text-danger">warning</i>
-              <a href="#pablo">Get More Space...</a>
+              <a href="{% url 'cart_detail' selected_customer.id %}" class="btn btn-primary btn-link btn-sm" style="margin-top: 5px; margin-left: 5px; float: right; color: green;">
+                Sepeti Görüntüle
+              </a>              
             </div>
           </div>
         </div>
@@ -90,11 +92,13 @@
             </p>
           </div>
           <div class="card-footer">
-              <p style="font-weight: bold;"> {{product.price}}</p>
-            <button type="button" class="btn btn-primary btn-link btn-sm" style="margin-top: 5px; margin-left: 5px; float: right; color: green;">
-              Sipariş Ver
-            </button>
-          </div>
+            <p style="font-weight: bold;"> {{ product.price }}</p>
+            <a href="{% url 'cart_add' product.id selected_customer.id%}">
+              <button type="button" class="btn btn-primary btn-link btn-sm" style="margin-top: 5px; margin-left: 5px; float: right; color: green;">
+                Sipariş Ver
+              </button>
+            </a>
+          </div>          
         </div>
       </div>
       {% endfor %}

@@ -186,4 +186,3 @@ class LoginForm(forms.Form):
                 'required': 'Bu alan zorunludur.',
             }
         }
-

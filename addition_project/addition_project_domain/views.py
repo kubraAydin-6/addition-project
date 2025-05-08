@@ -1,9 +1,14 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form
+from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form,order_product
 from .models import Category,Product,order,customer
 from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.views.decorators.http import require_POST
+from django.db.models import Sum
 
 def index(request, category_id=None):
     categories = Category.objects.all().order_by('sequence').values()
@@ -169,20 +174,106 @@ def delete_product(request, product_id):
     return product_list(request)
 
 def select_customer(request, customer_id):
-    selected_customer = get_object_or_404(customer, pk=customer_id)
+    selected_customer = customer.objects.filter(id=customer_id).first()
     selected_customer.is_customer = True
-    form = customer_create_form(request.POST,instance=selected_customer)
-    if form.is_valid():
-        form.save()
+    selected_customer.save()
     get_category = Category.objects.all().order_by('sequence').values()
     products = Product.objects.all().order_by('sequence').values()
-    return render(request, 'home/product-index.html', {'categories': get_category,'products': products})
+    return render(request, 'home/product-index.html', {'categories': get_category,'products': products,'selected_customer': selected_customer})
 
 def index_by_category(request, customer_id, category_id):
+    print(customer_id)
     categories = Category.objects.all().order_by('sequence').values()
+    selected_customer = get_object_or_404(customer, pk=customer_id)
     if category_id is not None:
         products = Product.objects.filter(category_id= category_id).order_by('sequence').values()
-        return render(request, 'home/product-index.html', {'products': products,'categories': categories})
+        return render(request, 'home/product-index.html', {'products': products,'categories': categories,'selected_customer': selected_customer})
     products = Product.objects.all().order_by('sequence').values()
-    return render(request, 'home/product-index.html', {'products': products,'categories': categories})
+    return render(request, 'home/product-index.html', {'products': products,'categories': categories,'selected_customer': selected_customer}) 
+
+# Sepet Sınıfı
+class Cart:
+    def __init__(self, request):
+        self.session = request.session
+        cart = self.session.get("cart")
+        if not cart:
+            cart = self.session["cart"] = {}
+        self.cart = cart
+
+    def add(self, product, quantity=1):
+        product_id = str(product.id)
+        if product_id not in self.cart:
+            self.cart[product_id] = {"quantity": 0, "price": str(product.price)}
+        self.cart[product_id]["quantity"] += quantity
+        self.save()
+
+    def save(self):
+        self.session.modified = True
+
+    def remove(self, product):
+        product_id = str(product.id)
+        if product_id in self.cart:
+            del self.cart[product_id]
+            self.save()
+
+    def clear(self):
+        self.session["cart"] = {}
+        self.save()
+
+    def __iter__(self):
+        product_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
+        cart = self.cart.copy()
+        for product in products:
+            cart[str(product.id)]["product"] = product
+
+        for item in cart.values():
+            item["price"] = Decimal(item["price"])
+            item["total_price"] = item["price"] * item["quantity"]
+            yield item
+
+    def __len__(self):
+        return sum(item["quantity"] for item in self.cart.values())
+
+    def get_total_price(self):
+        return sum(Decimal(item["price"]) * item["quantity"] for item in self.cart.values())
     
+def cart_add(request, product_id, customer_id=None):
+    product = get_object_or_404(Product, id=product_id)
+    select_customer = get_object_or_404(customer, id= customer_id)
+    current_order = order.objects.filter(customer=select_customer, status='pending').first()
+    if current_order:
+        create_order_product = order_product.objects.create(order=current_order, product=product, quantity=1, price=product.price, customer=select_customer, status='pending')
+        return cart_detail(request, customer_id) 
+    create_order = order.objects.create(customer=select_customer, total_price=product.price, status='pending')
+    create_order_product = order_product.objects.create(order=create_order, product=product, quantity=1, price=product.price, customer=select_customer, status='pending')
+    return cart_detail(request, customer_id)  # sepeti görmek için yönlendirme
+
+def cart_detail(request, customer_id=None):
+    order_product_list = order_product.objects.filter(customer_id=customer_id, status='pending').order_by('created_at').select_related('product')
+    cart_total_price = order_product_list.aggregate(total_price=Sum('price'))['total_price']
+
+    return render(request, 'cart/cart-detail.html', {
+        'cart_items': order_product_list,
+        'total_price': cart_total_price,
+        'customer_id': customer_id,
+    })
+
+def shop_view(request):
+    products = Product.objects.all()
+    return render(request, 'home/shop.html', {'products': products})
+
+# Sepetten Siparişe Dönüştürme
+def cart_checkout(request, customer_id=None):
+    current_order = order.objects.filter(customer_id=customer_id, status='pending').first()
+    if current_order:
+        current_order.status = 'completed'
+        current_order.save()
+    order_product_list = order_product.objects.filter(customer_id=customer_id).update(status='completed')
+    current_customer = customer.objects.filter(id=customer_id).update(is_customer=False)
+    return index(request,None)
+
+def cart_clear(request):
+    cart = Cart(request)
+    cart.clear()
+    return redirect('cart_detail')
