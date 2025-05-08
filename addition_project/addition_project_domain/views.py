@@ -1,11 +1,16 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form,KitchenOrderForm
+from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form,order_product,KitchenOrderForm
 from .models import Category,Product,order,customer, KitchenOrder
 from .forms import LoginForm, category_create_form, product_create_form,customer_create_form,order_create_form,order_product_create_form,order_product
 from .models import Category,Product,order,customer
 from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.views.decorators.http import require_POST
+from django.db.models import Sum
 from decimal import Decimal
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -177,18 +182,24 @@ def delete_product(request, product_id):
 
 def select_customer(request, customer_id):
     selected_customer = customer.objects.filter(id=customer_id).first()
+    selected_customer = customer.objects.filter(id=customer_id).first()
     selected_customer.is_customer = True
+    selected_customer.save()
     selected_customer.save()
     get_category = Category.objects.all().order_by('sequence').values()
     products = Product.objects.all().order_by('sequence').values()
     return render(request, 'home/product-index.html', {'categories': get_category,'products': products,'selected_customer': selected_customer})
+    return render(request, 'home/product-index.html', {'categories': get_category,'products': products,'selected_customer': selected_customer})
 
 def index_by_category(request, customer_id, category_id):
     print(customer_id)
+    print(customer_id)
     categories = Category.objects.all().order_by('sequence').values()
+    selected_customer = get_object_or_404(customer, pk=customer_id)
     selected_customer = get_object_or_404(customer, pk=customer_id)
     if category_id is not None:
         products = Product.objects.filter(category_id= category_id).order_by('sequence').values()
+        return render(request, 'home/product-index.html', {'products': products,'categories': categories,'selected_customer': selected_customer})
         return render(request, 'home/product-index.html', {'products': products,'categories': categories,'selected_customer': selected_customer})
     products = Product.objects.all().order_by('sequence').values()
     return render(request, 'home/product-index.html', {'products': products,'categories': categories})
